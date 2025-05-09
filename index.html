@@ -6,13 +6,13 @@
 <body>
   <h1>Chat with AI</h1>
   <input id="question" placeholder="Ask something..." />
-  <button onclick="send()">Send</button>
+  <button onclick="send()">Envia tu pregunta</button>
   <pre id="response"></pre>
 
   <script>
     async function send() {
       const question = document.getElementById("question").value;
-      const res = await fetch("https://n8n-flows-e5hv.onrender.com/webhook/price-products", {
+      const res = await fetch("https://n8n-flows-e5hv.onrender.com/webhook/test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: question })
