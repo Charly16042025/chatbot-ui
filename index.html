@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <title>Simple Chat</title>
@@ -19,6 +19,75 @@
       });
       const data = await res.json();
       document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    input {
+      padding: 0.5rem;
+      width: 300px;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin-left: 1rem;
+    }
+    pre {
+      margin-top: 1rem;
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chat with AI</h1>
+  <input id="question" placeholder="Ask something..." />
+  <button onclick="send()">Send</button>
+  <pre id="response">Response will appear here...</pre>
+
+  <script>
+    async function send() {
+      const question = document.getElementById("question").value;
+      const responseBox = document.getElementById("response");
+      responseBox.innerText = "Loading...";
+
+      try {
+        const res = await fetch("https://n8n-flows-e5hv.onrender.com/webhook-test/test", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: question })
+        });
+
+        // Try to parse JSON
+        const data = await res.json();
+
+        // If response is a stringified JSON (e.g., { "response": "..." }), try to parse it too
+        if (typeof data.response === "string") {
+          try {
+            const parsed = JSON.parse(data.response);
+            responseBox.innerText = JSON.stringify(parsed, null, 2);
+          } catch (e) {
+            // Just show the string if parsing fails
+            responseBox.innerText = data.response;
+          }
+        } else {
+          responseBox.innerText = JSON.stringify(data, null, 2);
+        }
+
+      } catch (err) {
+        responseBox.innerText = "Error: " + err.message;
+      }
     }
   </script>
 </body>
