@@ -33,6 +33,33 @@
 
   <script>
     async function send() {
+  const question = document.getElementById("question").value;
+  const responseBox = document.getElementById("response");
+  responseBox.innerText = "Loading...";
+
+  try {
+    const res = await fetch("https://n8n-flows-e5hv.onrender.com/webhook-test/price-products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: question })
+    });
+
+    // Handle both text and JSON responses
+    const text = await res.text();
+    try {
+      // Try parsing as JSON
+      const data = JSON.parse(text);
+      responseBox.innerText = data[0]?.output || text;
+    } catch {
+      // Fallback to plain text
+      responseBox.innerText = text;
+    }
+
+  } catch (err) {
+    responseBox.innerText = "Error: " + err.message;
+  }
+}
+ /*   async function send() {
       const question = document.getElementById("question").value;
       const responseBox = document.getElementById("response");
       responseBox.innerText = "Loading...";
@@ -55,7 +82,7 @@
       } catch (err) {
         responseBox.innerText = "Error: " + err.message;
       }
-    }
+    }*/
   </script>
 </body>
 </html>
